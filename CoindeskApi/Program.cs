@@ -11,6 +11,12 @@ internal class Program
         // // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        
+        builder.Services.AddHttpClient("coindesk", httpClient =>
+        {
+            // TODO config
+            httpClient.BaseAddress = new Uri("https://api.coindesk.com/");
+        });
 
         var app = builder.Build();
 
