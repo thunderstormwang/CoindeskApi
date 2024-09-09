@@ -19,8 +19,7 @@ internal class Program
         
         builder.Services.AddHttpClient("coindesk", httpClient =>
         {
-            // TODO config
-            httpClient.BaseAddress = new Uri("https://api.coindesk.com/");
+            httpClient.BaseAddress = new Uri(builder.Configuration.GetSection("Coindesk:Url").Value);
         });
 
         var app = builder.Build();
