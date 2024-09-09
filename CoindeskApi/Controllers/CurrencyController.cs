@@ -1,8 +1,11 @@
-﻿using CoindeskApi.Models;
+﻿using CoindeskApi.Filters;
+using CoindeskApi.Models;
 using CoindeskApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CoindeskApi.Controllers;
+
+// TODO 統一回傳物件, 包含驗證錯誤
 
 [Route("api/[controller]")]
 [ApiController]

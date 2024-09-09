@@ -1,11 +1,13 @@
-using System.ComponentModel.DataAnnotations;
 using CoindeskApi.Models;
-using FluentAssertions;
+using CoindeskApi.Models.Validators;
+using FluentValidation.TestHelper;
 
 namespace CoindeskApi.Test;
 
 public class CreateCurrencyDtoTest
 {
+    private CreateCurrencyDtoValidator _validator = new CreateCurrencyDtoValidator();
+
     [Fact(DisplayName = $"測試 {nameof(CreateCurrencyDto.Code)} 為必填")]
     public void Code_Required_Test()
     {
@@ -14,17 +16,11 @@ public class CreateCurrencyDtoTest
             Code = string.Empty,
             CurrencyName = "新台幣"
         };
-        
-        var actual = new List<ValidationResult>();
-        var ctx = new ValidationContext(request);
-        Validator.TryValidateObject(request, ctx, actual, true);
-        
-        actual.Should().NotBeNullOrEmpty();
-        actual.Count().Should().Be(1);
-        actual.First().MemberNames.Should().BeEquivalentTo(new List<string>() {$"{nameof(request.Code)}" });
-        actual.First().ErrorMessage.Should().Contain("The Code field is required.");
+
+        var result = _validator.TestValidate(request);
+        result.ShouldHaveValidationErrorFor(x => x.Code).WithErrorMessage($"{nameof(CreateCurrencyDto.Code)} 必填");
     }
-    
+
     [Fact(DisplayName = $"測試 {nameof(CreateCurrencyDto.CurrencyName)} 為必填")]
     public void CurrencyName_Required_Test()
     {
@@ -33,14 +29,9 @@ public class CreateCurrencyDtoTest
             Code = "TWD",
             CurrencyName = string.Empty
         };
-        
-        var actual = new List<ValidationResult>();
-        var ctx = new ValidationContext(request);
-        Validator.TryValidateObject(request, ctx, actual, true);
-        
-        actual.Should().NotBeNullOrEmpty();
-        actual.Count().Should().Be(1);
-        actual.First().MemberNames.Should().BeEquivalentTo(new List<string>() {$"{nameof(request.CurrencyName)}" });
-        actual.First().ErrorMessage.Should().Contain("The CurrencyName field is required.");
+
+        var result = _validator.TestValidate(request);
+        result.ShouldHaveValidationErrorFor(x => x.CurrencyName)
+            .WithErrorMessage($"{nameof(CreateCurrencyDto.CurrencyName)} 必填");
     }
 }
