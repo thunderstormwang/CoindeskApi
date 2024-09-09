@@ -24,7 +24,8 @@ public class CurrencyService : ICurrencyService
         {
             Code = createCurrencyDto.Code,
             Lang = "zh-TW",
-            CurrencyName = createCurrencyDto.CurrencyName
+            CurrencyName = createCurrencyDto.CurrencyName,
+            CreateTime = DateTime.Now
         };
         _currencyRepository.Add(currency);
         
@@ -34,6 +35,7 @@ public class CurrencyService : ICurrencyService
     public async Task<List<CurrencyEntity>> ReadAsync()
     {
         var result = await _currencyRepository.GetAsync();
+        result = result.OrderBy(x => x.Code).ToList();
 
         return result;
     }
@@ -46,7 +48,7 @@ public class CurrencyService : ICurrencyService
             throw new NotImplementedException();
         }
         
-        currency.CurrencyName = updateCurrencyDto.CurrencyName;
+        currency.SetCurrencyName(updateCurrencyDto.CurrencyName);
         await _currencyRepository.SaveEntitiesAsync();
     }
 
@@ -65,8 +67,7 @@ public class CurrencyService : ICurrencyService
     public async Task<PriceVo> GetPricesAsync()
     {
         var httpClient = _httpClientFactory.CreateClient("coindesk");
-        var httpResponseMessage = await httpClient.GetAsync(
-            "v1/bpi/currentprice.json");
+        var httpResponseMessage = await httpClient.GetAsync("v1/bpi/currentprice.json");
         
         if (!httpResponseMessage.IsSuccessStatusCode)
         {
@@ -78,36 +79,21 @@ public class CurrencyService : ICurrencyService
         
         var dateTime  = DateTime.ParseExact(coindesk.Time.Updated, "MMM d, yyyy HH:mm:ss 'UTC'", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
 
-        // TODO 排序, 反射
-        var vo = new PriceVo
+        var bpiCurrencyInfo = new List<CurrencyInfo>() {coindesk.Bpi.USD, coindesk.Bpi.GBP, coindesk.Bpi.EUR};
+        var currencies = await _currencyRepository.GetAsync();
+        currencies = currencies.Where(c => bpiCurrencyInfo.Any(bpi => bpi.Code == c.Code)).OrderBy(x => x.Code).ToList();
+
+        var priceVo = new PriceVo()
         {
             UpdateTime = dateTime.ToString("yyyy/MM/dd HH:mm:ss"),
-            Currencies = new List<PriceVo.Currency>()
+            Currencies = currencies.Select(c => new PriceVo.Currency()
+            {
+                Code = c.Code,
+                Name = c.CurrencyName,
+                Rate = bpiCurrencyInfo.FirstOrDefault(bpi => bpi.Code == c.Code)!.RateFloat
+            }).ToList()
         };
-        var currency1 = new PriceVo.Currency
-        {
-            Code = "USD",
-            Name = (await _currencyRepository.GetAsync("USD"))?.CurrencyName,
-            Rate = coindesk.Bpi.USD.RateFloat
-        };
-        vo.Currencies.Add(currency1);
-        
-        var currency2 = new PriceVo.Currency
-        {
-            Code = "GBP",
-            Name = (await _currencyRepository.GetAsync("GBP"))?.CurrencyName,
-            Rate = coindesk.Bpi.GBP.RateFloat
-        };
-        vo.Currencies.Add(currency2);
-        
-        var currency3 = new PriceVo.Currency
-        {
-            Code = "EUR",
-            Name = (await _currencyRepository.GetAsync("EUR"))?.CurrencyName,
-            Rate = coindesk.Bpi.EUR.RateFloat
-        };
-        vo.Currencies.Add(currency3);
 
-        return vo;
+        return priceVo;
     }
 }

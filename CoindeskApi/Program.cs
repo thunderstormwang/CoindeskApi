@@ -53,7 +53,8 @@ internal class Program
         {
             Code = "USD",
             Lang = "zh-TW",
-            CurrencyName = "美金"
+            CurrencyName = "美金",
+            CreateTime = DateTime.Now
         };
         currencyContext.Currencies.Add(currency1);
         
@@ -61,7 +62,8 @@ internal class Program
         {
             Code = "GBP",
             Lang = "zh-TW",
-            CurrencyName = "英鎊"
+            CurrencyName = "英鎊",
+            CreateTime = DateTime.Now
         };
         currencyContext.Currencies.Add(currency2);
         
@@ -69,7 +71,8 @@ internal class Program
         {
             Code = "EUR",
             Lang = "zh-TW",
-            CurrencyName = "歐元"
+            CurrencyName = "歐元",
+            CreateTime = DateTime.Now
         };
         currencyContext.Currencies.Add(currency3);
         currencyContext.SaveChanges();
