@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoindeskApi", "CoindeskApi\CoindeskApi.csproj", "{C0F33018-AFAB-48AA-B165-757FD27B1E92}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoindeskApi.Test", "CoindeskApi.Test\CoindeskApi.Test.csproj", "{3ED9E41D-7AA9-4ADA-A59A-F0782EAF77B2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{C0F33018-AFAB-48AA-B165-757FD27B1E92}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0F33018-AFAB-48AA-B165-757FD27B1E92}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0F33018-AFAB-48AA-B165-757FD27B1E92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3ED9E41D-7AA9-4ADA-A59A-F0782EAF77B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3ED9E41D-7AA9-4ADA-A59A-F0782EAF77B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3ED9E41D-7AA9-4ADA-A59A-F0782EAF77B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3ED9E41D-7AA9-4ADA-A59A-F0782EAF77B2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
