@@ -18,13 +18,13 @@ public class CurrencyService : ICurrencyService
         _httpClientFactory = httpClientFactory;
     }
 
-    public async Task CreateAsync(CurrencyDto currencyDto)
+    public async Task CreateAsync(CreateCurrencyDto createCurrencyDto)
     {
         var currency = new CurrencyEntity
         {
-            Code = currencyDto.Code,
+            Code = createCurrencyDto.Code,
             Lang = "zh-TW",
-            CurrencyName = currencyDto.CurrencyName
+            CurrencyName = createCurrencyDto.CurrencyName
         };
         _currencyRepository.Add(currency);
         
@@ -38,21 +38,21 @@ public class CurrencyService : ICurrencyService
         return result;
     }
 
-    public async Task UpdateAsync(CurrencyDto currencyDto)
+    public async Task UpdateAsync(UpdateCurrencyDto updateCurrencyDto)
     {
-        var currency = await _currencyRepository.GetAsync(currencyDto.Code);
+        var currency = await _currencyRepository.GetAsync(updateCurrencyDto.Code);
         if (currency == null)
         {
             throw new NotImplementedException();
         }
         
-        currency.CurrencyName = currencyDto.CurrencyName;
+        currency.CurrencyName = updateCurrencyDto.CurrencyName;
         await _currencyRepository.SaveEntitiesAsync();
     }
 
-    public async Task DeleteAsync(CurrencyDto currencyDto)
+    public async Task DeleteAsync(DeleteCurrencyDto deleteCurrencyDto)
     {
-        var currency = await _currencyRepository.GetAsync(currencyDto.Code);
+        var currency = await _currencyRepository.GetAsync(deleteCurrencyDto.Code);
         if (currency == null)
         {
             throw new NotImplementedException();

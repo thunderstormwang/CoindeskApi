@@ -16,9 +16,9 @@ public class CurrencyController : Controller
     }
 
     [HttpPost("create")]
-    public async Task<IActionResult> Create([FromBody] CurrencyDto currencyDto)
+    public async Task<IActionResult> Create([FromBody] CreateCurrencyDto createCurrencyDto)
     {
-        await _currencyService.CreateAsync(currencyDto);
+        await _currencyService.CreateAsync(createCurrencyDto);
         
         return Ok("成功");
     }
@@ -32,17 +32,17 @@ public class CurrencyController : Controller
     }
     
     [HttpPost("update")]
-    public async Task<IActionResult> Update(CurrencyDto currencyDto)
+    public async Task<IActionResult> Update(UpdateCurrencyDto createCurrencyDto)
     {
-        await _currencyService.UpdateAsync(currencyDto);
+        await _currencyService.UpdateAsync(createCurrencyDto);
         
         return Ok("成功");
     }
     
     [HttpPost("delete")]
-    public async Task<IActionResult> Delete(CurrencyDto currencyDto)
+    public async Task<IActionResult> Delete(DeleteCurrencyDto createCurrencyDto)
     {
-        await _currencyService.DeleteAsync(currencyDto);
+        await _currencyService.DeleteAsync(createCurrencyDto);
         
         return Ok("成功");
     }
