@@ -1,6 +1,8 @@
+using CoindeskApi.Controllers;
 using CoindeskApi.Models;
 using CoindeskApi.Models.Domains;
 using CoindeskApi.Repositories;
+using CoindeskApi.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace CoindeskApi;
@@ -20,6 +22,7 @@ internal class Program
         builder.Services.AddSwaggerGen();
 
         builder.Services.AddScoped<ICurrencyRepository, CurrencyRepository>();
+        builder.Services.AddScoped<ICurrencyService, CurrencyService>();
         
         builder.Services.AddHttpClient("coindesk", httpClient =>
         {

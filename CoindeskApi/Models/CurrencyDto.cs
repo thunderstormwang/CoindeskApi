@@ -1,4 +1,4 @@
-﻿namespace CoindeskApi.Controllers;
+﻿namespace CoindeskApi.Models;
 
 public class CurrencyDto
 {
