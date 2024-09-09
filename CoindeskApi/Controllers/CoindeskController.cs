@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Text.Json;
 using CoindeskApi.Models;
+using CoindeskApi.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CoindeskApi.Controllers;
@@ -10,12 +11,12 @@ namespace CoindeskApi.Controllers;
 public class CoindeskController : ControllerBase
 {
     private readonly IHttpClientFactory _httpClientFactory;
-    private readonly CurrencyContext _context;
+    private readonly ICurrencyRepository _currencyRepository;
 
-    public CoindeskController(IHttpClientFactory httpClientFactory, CurrencyContext context)
+    public CoindeskController(IHttpClientFactory httpClientFactory, ICurrencyRepository currencyRepository)
     {
         _httpClientFactory = httpClientFactory;
-        _context = context;
+        _currencyRepository = currencyRepository;
     }
 
     [HttpGet("query")]
@@ -44,7 +45,7 @@ public class CoindeskController : ControllerBase
         var currency1 = new RateVo.Currency
         {
             Code = "USD",
-            Name = _context.Currencies.FirstOrDefault(x => x.Code == "USD").CurrencyName,
+            Name = (await _currencyRepository.GetAsync("USD"))?.CurrencyName,
             Rate = coindesk.Bpi.USD.RateFloat
         };
         vo.Currencies.Add(currency1);
@@ -52,7 +53,7 @@ public class CoindeskController : ControllerBase
         var currency2 = new RateVo.Currency
         {
             Code = "GBP",
-            Name = _context.Currencies.FirstOrDefault(x => x.Code == "GBP").CurrencyName,
+            Name = (await _currencyRepository.GetAsync("GBP"))?.CurrencyName,
             Rate = coindesk.Bpi.GBP.RateFloat
         };
         vo.Currencies.Add(currency2);
@@ -60,7 +61,7 @@ public class CoindeskController : ControllerBase
         var currency3 = new RateVo.Currency
         {
             Code = "EUR",
-            Name = _context.Currencies.FirstOrDefault(x => x.Code == "EUR").CurrencyName,
+            Name = (await _currencyRepository.GetAsync("EUR"))?.CurrencyName,
             Rate = coindesk.Bpi.EUR.RateFloat
         };
         vo.Currencies.Add(currency3);

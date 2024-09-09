@@ -1,4 +1,6 @@
 using CoindeskApi.Models;
+using CoindeskApi.Models.Domains;
+using CoindeskApi.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace CoindeskApi;
@@ -16,6 +18,8 @@ internal class Program
         // // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+
+        builder.Services.AddScoped<ICurrencyRepository, CurrencyRepository>();
         
         builder.Services.AddHttpClient("coindesk", httpClient =>
         {
@@ -42,7 +46,7 @@ internal class Program
     private static void InitialData(WebApplication app)
     {
         var currencyContext = app.Services.GetRequiredService<CurrencyContext>();
-        var currency1 = new Currency
+        var currency1 = new CurrencyEntity
         {
             Code = "USD",
             Lang = "zh-TW",
@@ -50,7 +54,7 @@ internal class Program
         };
         currencyContext.Currencies.Add(currency1);
         
-        var currency2 = new Currency
+        var currency2 = new CurrencyEntity
         {
             Code = "GBP",
             Lang = "zh-TW",
@@ -58,7 +62,7 @@ internal class Program
         };
         currencyContext.Currencies.Add(currency2);
         
-        var currency3 = new Currency
+        var currency3 = new CurrencyEntity
         {
             Code = "EUR",
             Lang = "zh-TW",

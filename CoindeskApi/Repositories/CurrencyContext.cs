@@ -1,7 +1,7 @@
-using CoindeskApi.Controllers;
+using CoindeskApi.Models.Domains;
 using Microsoft.EntityFrameworkCore;
 
-namespace CoindeskApi.Models;
+namespace CoindeskApi.Repositories;
 
 public class CurrencyContext : DbContext
 {
@@ -10,5 +10,5 @@ public class CurrencyContext : DbContext
     {
     }
 
-    public DbSet<Currency> Currencies { get; set; }
+    public DbSet<CurrencyEntity> Currencies { get; set; }
 }

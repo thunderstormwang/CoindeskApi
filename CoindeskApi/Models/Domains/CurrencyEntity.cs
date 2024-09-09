@@ -1,6 +1,6 @@
-namespace CoindeskApi.Models;
+namespace CoindeskApi.Models.Domains;
 
-public class Currency
+public class CurrencyEntity : IAggregateRoot
 {
     public int Id { get; set; }
     public string Code { get; set; }

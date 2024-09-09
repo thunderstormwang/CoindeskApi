@@ -1,4 +1,5 @@
-﻿using CoindeskApi.Models;
+﻿using CoindeskApi.Models.Domains;
+using CoindeskApi.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CoindeskApi.Controllers;
@@ -7,24 +8,24 @@ namespace CoindeskApi.Controllers;
 [ApiController]
 public class CurrencyController : Controller
 {
-    private readonly CurrencyContext _context;
+    private readonly ICurrencyRepository _currencyRepository;
 
-    public CurrencyController(CurrencyContext context)
+    public CurrencyController(ICurrencyRepository currencyRepository)
     {
-        _context = context;
+        _currencyRepository = currencyRepository;
     }
 
     [HttpPost("create")]
     public async Task<IActionResult> Create([FromBody] CurrencyDto currencyDto)
     {
-        var currency = new Currency
+        var currency = new CurrencyEntity
         {
             Code = currencyDto.Code,
             Lang = "zh-TW",
             CurrencyName = currencyDto.CurrencyName
         };
-        _context.Currencies.Add(currency);
-        await _context.SaveChangesAsync();
+        _currencyRepository.Add(currency);
+        await _currencyRepository.SaveEntitiesAsync();
         
         return Ok("成功");
     }
@@ -32,7 +33,7 @@ public class CurrencyController : Controller
     [HttpGet("read")]
     public async Task<IActionResult> Read()
     {
-        var result = _context.Currencies.ToList();
+        var result = await _currencyRepository.GetAsync();
         
         return Ok(result);
     }
@@ -40,14 +41,14 @@ public class CurrencyController : Controller
     [HttpPost("update")]
     public async Task<IActionResult> Update(CurrencyDto currencyDto)
     {
-        var currency = _context.Currencies.FirstOrDefault(x => x.Code == currencyDto.Code);
+        var currency = await _currencyRepository.GetAsync(currencyDto.Code);
         if (currency == null)
         {
             return Ok("找不到資料");
         }
         
         currency.CurrencyName = currencyDto.CurrencyName;
-        await _context.SaveChangesAsync();
+        await _currencyRepository.SaveEntitiesAsync();
         
         return Ok("成功");
     }
@@ -55,14 +56,14 @@ public class CurrencyController : Controller
     [HttpPost("delete")]
     public async Task<IActionResult> Delete(CurrencyDto currencyDto)
     {
-        var currency = _context.Currencies.FirstOrDefault(x => x.Code == currencyDto.Code);
+        var currency = await _currencyRepository.GetAsync(currencyDto.Code);
         if (currency == null)
         {
             return Ok("找不到資料");
         }
         
-        _context.Currencies.Remove(currency);
-        await _context.SaveChangesAsync();
+        _currencyRepository.Remove(currency);
+        await _currencyRepository.SaveEntitiesAsync();
         
         return Ok("成功");
     }
