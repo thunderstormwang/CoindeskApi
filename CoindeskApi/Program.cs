@@ -17,7 +17,11 @@ internal class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddControllers(opt => { opt.Filters.Add<ValidateModelFilter>(); })
+        builder.Services.AddControllers(opt =>
+            {
+                opt.Filters.Add<ExceptionFilter>();
+                opt.Filters.Add<ValidateModelFilter>();
+            })
             .ConfigureApiBehaviorOptions(opt => opt.SuppressModelStateInvalidFilter = true);
         builder.Services.AddFluentValidationAutoValidation(opt => opt.DisableDataAnnotationsValidation = true);
 
