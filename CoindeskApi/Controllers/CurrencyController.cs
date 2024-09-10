@@ -1,11 +1,11 @@
 ﻿using CoindeskApi.Filters;
 using CoindeskApi.Models;
+using CoindeskApi.Models.Domains;
 using CoindeskApi.Services;
+using CoindeskApi.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CoindeskApi.Controllers;
-
-// TODO 統一回傳物件, 包含驗證錯誤
 
 [Route("api/[controller]")]
 [ApiController]
@@ -23,7 +23,7 @@ public class CurrencyController : Controller
     {
         await _currencyService.CreateAsync(createCurrencyDto);
         
-        return Ok("成功");
+        return Ok(ApiResponseVo<bool>.CreateSuccess(true));
     }
     
     [HttpGet("read")]
@@ -31,7 +31,7 @@ public class CurrencyController : Controller
     {
         var result = await _currencyService.ReadAsync();
         
-        return Ok(result);
+        return Ok(ApiResponseVo<List<CurrencyVo>>.CreateSuccess(result));
     }
     
     [HttpPost("update")]
@@ -39,7 +39,7 @@ public class CurrencyController : Controller
     {
         await _currencyService.UpdateAsync(createCurrencyDto);
         
-        return Ok("成功");
+        return Ok(ApiResponseVo<bool>.CreateSuccess(true));
     }
     
     [HttpPost("delete")]
@@ -47,6 +47,6 @@ public class CurrencyController : Controller
     {
         await _currencyService.DeleteAsync(createCurrencyDto);
         
-        return Ok("成功");
+        return Ok(ApiResponseVo<bool>.CreateSuccess(true));
     }
 }

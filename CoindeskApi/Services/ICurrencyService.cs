@@ -7,7 +7,7 @@ namespace CoindeskApi.Services;
 public interface ICurrencyService
 {
     Task CreateAsync(CreateCurrencyDto createCurrencyDto);
-    Task<List<CurrencyEntity>> ReadAsync();
+    Task<List<CurrencyVo>> ReadAsync();
     Task UpdateAsync(UpdateCurrencyDto updateCurrencyDto);
     Task DeleteAsync(DeleteCurrencyDto deleteCurrencyDto);
     Task<PriceVo> GetPricesAsync();

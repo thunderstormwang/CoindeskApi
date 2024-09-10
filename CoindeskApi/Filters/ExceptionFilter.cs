@@ -1,8 +1,10 @@
+using CoindeskApi.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace CoindeskApi.Filters;
 
-public class ExceptionFilter :IAsyncExceptionFilter
+public class ExceptionFilter : IExceptionFilter
 {
     private readonly ILogger<ExceptionFilter> _logger;
 
@@ -11,14 +13,16 @@ public class ExceptionFilter :IAsyncExceptionFilter
         _logger = logger;
     }
 
-    public async Task OnExceptionAsync(ExceptionContext context)
+    public void OnException(ExceptionContext context)
     {
         var exception = context.Exception;
         _logger.LogError(exception.ToString());
-        
+
+        var failResponse = ApiResponseVo<object>.CreateFailure(new List<string>() { exception.Message });
         context.ExceptionHandled = true;
-        context.HttpContext.Response.ContentType = "application/json";
-        context.HttpContext.Response.StatusCode = 200;
-        await context.HttpContext.Response.WriteAsync(exception.Message);
+        context.Result = new JsonResult(failResponse)
+        {
+            StatusCode = 200
+        };
     }
 }

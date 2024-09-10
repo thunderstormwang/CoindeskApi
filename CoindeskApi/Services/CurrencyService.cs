@@ -23,6 +23,13 @@ public class CurrencyService : ICurrencyService
 
     public async Task CreateAsync(CreateCurrencyDto createCurrencyDto)
     {
+        var existCurrency = await _currencyRepository.GetAsync(createCurrencyDto.Code);
+        if (existCurrency != null)
+        {
+            // TODO 錯誤處理
+            throw new NotImplementedException();
+        }
+        
         var currency = new CurrencyEntity
         {
             Code = createCurrencyDto.Code,
@@ -35,10 +42,14 @@ public class CurrencyService : ICurrencyService
         await _currencyRepository.SaveEntitiesAsync();
     }
 
-    public async Task<List<CurrencyEntity>> ReadAsync()
+    public async Task<List<CurrencyVo>> ReadAsync()
     {
-        var result = await _currencyRepository.GetAsync();
-        result = result.OrderBy(x => x.Code).ToList();
+        var currencies = await _currencyRepository.GetAsync();
+        var result = currencies.OrderBy(x => x.Code).Select(x => new CurrencyVo
+        {
+            Code = x.Code,
+            CurrencyName = x.CurrencyName
+        }).ToList();
 
         return result;
     }
@@ -48,6 +59,7 @@ public class CurrencyService : ICurrencyService
         var currency = await _currencyRepository.GetAsync(updateCurrencyDto.Code);
         if (currency == null)
         {
+            // TODO 錯誤處理
             throw new NotImplementedException();
         }
         
@@ -60,6 +72,7 @@ public class CurrencyService : ICurrencyService
         var currency = await _currencyRepository.GetAsync(deleteCurrencyDto.Code);
         if (currency == null)
         {
+            // TODO 錯誤處理
             throw new NotImplementedException();
         }
         
@@ -80,7 +93,7 @@ public class CurrencyService : ICurrencyService
         var priceVo = new PriceVo()
         {
             UpdateTime = dateTime.ToString("yyyy/MM/dd HH:mm:ss"),
-            Currencies = currencies.Select(c => new PriceVo.CurrencyVo()
+            Currencies = currencies.Select(c => new PriceVo.CurrencyRateVo()
             {
                 Code = c.Code,
                 Name = c.CurrencyName,
