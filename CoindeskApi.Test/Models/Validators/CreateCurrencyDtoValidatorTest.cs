@@ -2,9 +2,9 @@ using CoindeskApi.Models;
 using CoindeskApi.Models.Validators;
 using FluentValidation.TestHelper;
 
-namespace CoindeskApi.Test;
+namespace CoindeskApi.Test.Models.Validators;
 
-public class CreateCurrencyDtoTest
+public class CreateCurrencyDtoValidatorTest
 {
     private CreateCurrencyDtoValidator _validator = new CreateCurrencyDtoValidator();
 

@@ -2,9 +2,9 @@
 using CoindeskApi.Models.Validators;
 using FluentValidation.TestHelper;
 
-namespace CoindeskApi.Test;
+namespace CoindeskApi.Test.Models.Validators;
 
-public class DeleteCurrencyDtoTest
+public class DeleteCurrencyDtoValidatorTest
 {
     private DeleteCurrencyDtoValidator _validator = new DeleteCurrencyDtoValidator();
 

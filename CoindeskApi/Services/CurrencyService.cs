@@ -10,15 +10,13 @@ public class CurrencyService : ICurrencyService
 {
     private readonly ICurrencyRepository _currencyRepository;
     private readonly ILogger<CurrencyService> _logger;
-    private readonly HttpClient _httpClient;
     private readonly ICoindeskApiService _coindeskApiService;
 
-    public CurrencyService(IHttpClientFactory httpClientFactory, ICurrencyRepository currencyRepository, ILogger<CurrencyService> logger, ICoindeskApiService coindeskApiService)
+    public CurrencyService(ICurrencyRepository currencyRepository, ILogger<CurrencyService> logger, ICoindeskApiService coindeskApiService)
     {
         _currencyRepository = currencyRepository;
         _logger = logger;
         _coindeskApiService = coindeskApiService;
-        _httpClient = httpClientFactory.CreateClient("coindesk");
     }
 
     public async Task CreateAsync(CreateCurrencyDto createCurrencyDto)
@@ -26,8 +24,7 @@ public class CurrencyService : ICurrencyService
         var existCurrency = await _currencyRepository.GetAsync(createCurrencyDto.Code);
         if (existCurrency != null)
         {
-            // TODO 錯誤處理
-            throw new NotImplementedException();
+            throw new Exception("資料已存在");
         }
         
         var currency = new CurrencyEntity
@@ -38,8 +35,11 @@ public class CurrencyService : ICurrencyService
             CreateTime = DateTime.Now
         };
         _currencyRepository.Add(currency);
-        
-        await _currencyRepository.SaveEntitiesAsync();
+
+        if (await _currencyRepository.SaveEntitiesAsync() <= 0)
+        {
+            throw new Exception("更新 0 筆資料");
+        }
     }
 
     public async Task<List<CurrencyVo>> ReadAsync()
