@@ -1,5 +1,4 @@
 using System.Globalization;
-using System.Text.Json;
 using CoindeskApi.Models;
 using CoindeskApi.Models.Domains;
 using CoindeskApi.Repositories;
@@ -9,13 +8,17 @@ namespace CoindeskApi.Services;
 
 public class CurrencyService : ICurrencyService
 {
-    private readonly IHttpClientFactory _httpClientFactory;
     private readonly ICurrencyRepository _currencyRepository;
+    private readonly ILogger<CurrencyService> _logger;
+    private readonly HttpClient _httpClient;
+    private readonly ICoindeskApiService _coindeskApiService;
 
-    public CurrencyService(IHttpClientFactory httpClientFactory, ICurrencyRepository currencyRepository)
+    public CurrencyService(IHttpClientFactory httpClientFactory, ICurrencyRepository currencyRepository, ILogger<CurrencyService> logger, ICoindeskApiService coindeskApiService)
     {
         _currencyRepository = currencyRepository;
-        _httpClientFactory = httpClientFactory;
+        _logger = logger;
+        _coindeskApiService = coindeskApiService;
+        _httpClient = httpClientFactory.CreateClient("coindesk");
     }
 
     public async Task CreateAsync(CreateCurrencyDto createCurrencyDto)
@@ -66,27 +69,18 @@ public class CurrencyService : ICurrencyService
 
     public async Task<PriceVo> GetPricesAsync()
     {
-        var httpClient = _httpClientFactory.CreateClient("coindesk");
-        var httpResponseMessage = await httpClient.GetAsync("v1/bpi/currentprice.json");
-        
-        if (!httpResponseMessage.IsSuccessStatusCode)
-        {
-            throw new NotImplementedException();
-        }
+        var bitcoinPriceIndex = await _coindeskApiService.GetBitcoinPriceIndexAsync();
 
-        await using var contentStream = await httpResponseMessage.Content.ReadAsStreamAsync();
-        var coindesk = await JsonSerializer.DeserializeAsync<BitcoinPriceIndex>(contentStream);
-        
-        var dateTime  = DateTime.ParseExact(coindesk.Time.Updated, "MMM d, yyyy HH:mm:ss 'UTC'", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
+        var dateTime  = DateTime.ParseExact(bitcoinPriceIndex.Time.Updated, "MMM d, yyyy HH:mm:ss 'UTC'", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
 
-        var bpiCurrencyInfo = new List<CurrencyInfo>() {coindesk.Bpi.USD, coindesk.Bpi.GBP, coindesk.Bpi.EUR};
+        var bpiCurrencyInfo = new List<CurrencyInfo>() {bitcoinPriceIndex.Bpi.USD, bitcoinPriceIndex.Bpi.GBP, bitcoinPriceIndex.Bpi.EUR};
         var currencies = await _currencyRepository.GetAsync();
         currencies = currencies.Where(c => bpiCurrencyInfo.Any(bpi => bpi.Code == c.Code)).OrderBy(x => x.Code).ToList();
 
         var priceVo = new PriceVo()
         {
             UpdateTime = dateTime.ToString("yyyy/MM/dd HH:mm:ss"),
-            Currencies = currencies.Select(c => new PriceVo.Currency()
+            Currencies = currencies.Select(c => new PriceVo.CurrencyVo()
             {
                 Code = c.Code,
                 Name = c.CurrencyName,

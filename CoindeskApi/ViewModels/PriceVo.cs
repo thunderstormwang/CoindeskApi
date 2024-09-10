@@ -4,9 +4,9 @@ public class PriceVo
 {
     public string UpdateTime { get; set; }
 
-    public List<Currency> Currencies { get; set; }
+    public List<CurrencyVo> Currencies { get; set; }
 
-    public class Currency
+    public class CurrencyVo
     {
         public string Code { get; set; }
         public string Name { get; set; }

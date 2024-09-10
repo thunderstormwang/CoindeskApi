@@ -35,6 +35,7 @@ internal class Program
         builder.Services.AddValidatorsFromAssemblyContaining<CreateCurrencyDtoValidator>();
         builder.Services.AddScoped<ICurrencyRepository, CurrencyRepository>();
         builder.Services.AddScoped<ICurrencyService, CurrencyService>();
+        builder.Services.AddScoped<ICoindeskApiService, CoindeskApiService>();
 
         builder.Services.AddHttpClient("coindesk",
             httpClient =>
