@@ -101,7 +101,6 @@ public class CurrencyServiceTest
         var usd = new CurrencyEntity
         {
             Code = "USD",
-            Lang = "zh-TW",
             CurrencyName = "美金",
             CreateTime = DateTime.Now
         };
@@ -110,7 +109,6 @@ public class CurrencyServiceTest
         var gbp = new CurrencyEntity
         {
             Code = "GBP",
-            Lang = "zh-TW",
             CurrencyName = "英鎊",
             CreateTime = DateTime.Now
         };
@@ -119,7 +117,6 @@ public class CurrencyServiceTest
         var eur = new CurrencyEntity
         {
             Code = "EUR",
-            Lang = "zh-TW",
             CurrencyName = "歐元",
             CreateTime = DateTime.Now
         };

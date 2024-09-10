@@ -30,7 +30,6 @@ public class CurrencyService : ICurrencyService
         var currency = new CurrencyEntity
         {
             Code = createCurrencyDto.Code,
-            Lang = "zh-TW",
             CurrencyName = createCurrencyDto.CurrencyName,
             CreateTime = DateTime.Now
         };

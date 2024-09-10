@@ -1,6 +1,5 @@
 using CoindeskApi.Filters;
 using CoindeskApi.Middlewares;
-using CoindeskApi.Models;
 using CoindeskApi.Models.Domains;
 using CoindeskApi.Models.Validators;
 using CoindeskApi.Repositories;
@@ -8,8 +7,6 @@ using CoindeskApi.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
 
 namespace CoindeskApi;
 
@@ -18,6 +15,7 @@ internal class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+        var isUseInMemoryDatabase = builder.Configuration.GetValue<bool>("ConnectionStrings:IsUseInMemoryDatabase");
 
         builder.Services.AddControllers(opt =>
             {
@@ -26,9 +24,17 @@ internal class Program
             })
             .ConfigureApiBehaviorOptions(opt => opt.SuppressModelStateInvalidFilter = true);
         builder.Services.AddFluentValidationAutoValidation(opt => opt.DisableDataAnnotationsValidation = true);
-
-        builder.Services.AddDbContext<CurrencyContext>(opt =>
-            opt.UseInMemoryDatabase("Currency"), contextLifetime: ServiceLifetime.Singleton);
+        
+        if (isUseInMemoryDatabase)
+        {
+            builder.Services.AddDbContext<CurrencyContext>(opt =>
+                opt.UseInMemoryDatabase("Currency"), contextLifetime: ServiceLifetime.Singleton);
+        }
+        else
+        {
+            builder.Services.AddDbContext<CurrencyContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+        }
         // Add services to the container.
         // // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
@@ -53,7 +59,10 @@ internal class Program
         
         app.UseMiddleware<ApiLogMiddleware>();
 
-        InitialData(app);
+        if (isUseInMemoryDatabase)
+        {
+            InitialData(app);
+        }
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
@@ -74,7 +83,6 @@ internal class Program
         var currency1 = new CurrencyEntity
         {
             Code = "USD",
-            Lang = "zh-TW",
             CurrencyName = "美金",
             CreateTime = DateTime.Now
         };
@@ -83,7 +91,6 @@ internal class Program
         var currency2 = new CurrencyEntity
         {
             Code = "GBP",
-            Lang = "zh-TW",
             CurrencyName = "英鎊",
             CreateTime = DateTime.Now
         };
@@ -92,7 +99,6 @@ internal class Program
         var currency3 = new CurrencyEntity
         {
             Code = "EUR",
-            Lang = "zh-TW",
             CurrencyName = "歐元",
             CreateTime = DateTime.Now
         };

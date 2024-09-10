@@ -1,30 +1,30 @@
 # CoindeskApi
-面試作業
 
+建資料庫語法
 
 ```sql
-CREATE TABLE Currency
+CREATE DATABASE Coindesk
+GO
+
+CREATE TABLE [Coindesk].[dbo].[Currencies]
 (
-    Id           INT identity,
-    Code         VARCHAR(3)  NOT NULL,
-    Lang         VARCHAR(10) NOT NULL,
-    CurrencyName NVARCHAR(10)
-)
-go
+    [Id]           INT          NOT NULL IDENTITY,
+    [Code]         VARCHAR(10)  NOT NULL,
+    [Lang]         VARCHAR(10)  NOT NULL,
+    [CurrencyName] NVARCHAR(10) NOT NULL,
+    [CreateTime]   DATETIME     NOT NULL,
+    [ModifiedTime] DATETIME     NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC)
+);
+
+INSERT INTO Coindesk.dbo.Currencies
+    (Code, Lang, CurrencyName, CreateTime)
+Values ('USD', 'zh-TW', N'美金', GETDATE()),
+       ('GBP', 'zh-TW', N'英鎊', GETDATE()),
+       ('EUR', 'zh-TW', N'歐元', GETDATE())
 ```
 
 ---
-
-任務描述  
-請利用 ASP .NET Core 8.0 建置一個 Web API 專案，實作以下內容，將結果上傳至 GitHub，並提供repo鏈結。  
-
-資料庫  
-SQL Server Express LocalDB（Entity Framework Core）  
-
-功能簡述  
-- 呼叫 coindesk API，解析其下行內容與資料轉換，並實作新的 API。coindesk API：https://api.coindesk.com/v1/bpi/currentprice.json
-- 建立一張幣別與其對應中文名稱的資料表（需附建立SQL語法），並提供查詢/新增/修改/刪除功能 API。
-- 查詢幣別請依照幣別代碼排序。
 
 實作內容  
 - [x] 幣別 DB 維護功能。
