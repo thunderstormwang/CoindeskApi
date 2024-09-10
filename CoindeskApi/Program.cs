@@ -8,6 +8,8 @@ using CoindeskApi.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 
 namespace CoindeskApi;
 
@@ -30,7 +32,11 @@ internal class Program
         // Add services to the container.
         // // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        builder.Services.AddSwaggerGen(c =>
+        {
+            c.EnableAnnotations();
+            c.IncludeXmlComments(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"CoindeskApi.xml"));
+        });
 
         builder.Services.AddValidatorsFromAssemblyContaining<CreateCurrencyDtoValidator>();
         builder.Services.AddScoped<ICurrencyRepository, CurrencyRepository>();
