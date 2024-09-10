@@ -7,8 +7,8 @@ namespace CoindeskApi.Controllers;
 public class TestController : ControllerBase
 {
     [HttpGet("hello")]
-    public IActionResult GetTodoItem()
+    public IActionResult Hello([FromQuery]string name, int count)
     {
-        return Ok("hello world!!");
+        return Ok($"hello world!! {name}, {count}");
     }
 }

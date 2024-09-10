@@ -1,4 +1,5 @@
 using CoindeskApi.Filters;
+using CoindeskApi.Middlewares;
 using CoindeskApi.Models;
 using CoindeskApi.Models.Domains;
 using CoindeskApi.Models.Validators;
@@ -38,6 +39,8 @@ internal class Program
             });
 
         var app = builder.Build();
+        
+        app.UseMiddleware<ApiLogMiddleware>();
 
         InitialData(app);
 
