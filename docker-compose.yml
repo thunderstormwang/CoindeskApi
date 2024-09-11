@@ -4,3 +4,7 @@
     build:
       context: .
       dockerfile: CoindeskApi/Dockerfile
+    ports:
+      - "12345:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
