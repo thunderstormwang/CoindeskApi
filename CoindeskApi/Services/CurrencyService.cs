@@ -58,8 +58,7 @@ public class CurrencyService : ICurrencyService
         var currency = await _currencyRepository.GetAsync(updateCurrencyDto.Code);
         if (currency == null)
         {
-            // TODO 錯誤處理
-            throw new NotImplementedException();
+            throw new Exception("資料不存在");
         }
         
         currency.SetCurrencyName(updateCurrencyDto.CurrencyName);
@@ -71,8 +70,7 @@ public class CurrencyService : ICurrencyService
         var currency = await _currencyRepository.GetAsync(deleteCurrencyDto.Code);
         if (currency == null)
         {
-            // TODO 錯誤處理
-            throw new NotImplementedException();
+            throw new Exception("資料不存在");
         }
         
         _currencyRepository.Remove(currency);

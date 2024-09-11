@@ -37,7 +37,7 @@ docker-compose up -d
 - [x] 呼叫 coindesk 的 API，並進行資料轉換，組成新 API。此新 API 提供：
   - 更新時間（時間格式範例：1990/01/01 00:00:00）。
   - 幣別相關資訊（幣別，幣別中文名稱，以及匯率）。
-- [ ] 所有功能均須包含單元測試。
+- [x] 所有功能均須包含單元測試。
 - [ ] 將專案上傳至 GitHub 並設為公開分享，回傳repo鏈結。
 - [ ] 嘗試錄製demo，上傳至Youtube影片(不要用Shorts)，設為非公開分享回傳
 
@@ -47,6 +47,6 @@ docker-compose up -d
 - [x] swagger-ui
 - [ ] 多語系設計
 - [ ] design pattern 實作
-- [ ] 能夠運行在 Docker
+- [x] 能夠運行在 Docker
 - [ ] 加解密技術應用 (AES/RSA…etc.)
 

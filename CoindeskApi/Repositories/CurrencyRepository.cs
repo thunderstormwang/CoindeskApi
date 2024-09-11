@@ -5,7 +5,7 @@ namespace CoindeskApi.Repositories;
 
 public class CurrencyRepository : ICurrencyRepository
 {
-    private readonly CurrencyContext _context;
+    protected readonly CurrencyContext _context;
 
     public CurrencyRepository(CurrencyContext context)
     {
