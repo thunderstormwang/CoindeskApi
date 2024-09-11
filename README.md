@@ -24,6 +24,11 @@ Values ('USD', 'zh-TW', N'美金', GETDATE()),
        ('EUR', 'zh-TW', N'歐元', GETDATE())
 ```
 
+在 Docker 執行專案
+```bash
+docker-compose up -d
+```
+
 ---
 
 實作內容  

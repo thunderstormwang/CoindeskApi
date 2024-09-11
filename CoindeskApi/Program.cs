@@ -65,7 +65,7 @@ internal class Program
         }
 
         // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
+        if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == "DockerDev")
         {
             app.UseSwagger();
             app.UseSwaggerUI();
