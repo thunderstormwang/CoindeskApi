@@ -1,0 +1,6 @@
+﻿services:
+  coindeskapi:
+    image: coindeskapi
+    build:
+      context: .
+      dockerfile: CoindeskApi/Dockerfile
