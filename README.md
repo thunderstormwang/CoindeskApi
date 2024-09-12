@@ -38,8 +38,8 @@ docker-compose up -d
   - 更新時間（時間格式範例：1990/01/01 00:00:00）。
   - 幣別相關資訊（幣別，幣別中文名稱，以及匯率）。
 - [x] 所有功能均須包含單元測試。
-- [ ] 將專案上傳至 GitHub 並設為公開分享，回傳repo鏈結。
-- [ ] 嘗試錄製demo，上傳至Youtube影片(不要用Shorts)，設為非公開分享回傳
+- [x] 將專案上傳至 GitHub 並設為公開分享，回傳repo鏈結。
+- [x] 嘗試錄製demo，上傳至Youtube影片(不要用Shorts)，設為非公開分享回傳
 
 實作加分題 (請於 README 說明包含以下哪些項目)  
 - [x] 印出所有 API 被呼叫以及呼叫外部 API 的 request and response  body log
