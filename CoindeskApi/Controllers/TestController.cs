@@ -1,4 +1,5 @@
 ﻿using CoindeskApi.Models;
+using CoindeskApi.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -8,6 +9,13 @@ namespace CoindeskApi.Controllers;
 [ApiController]
 public class TestController : ControllerBase
 {
+    private readonly ICurrencyRepository _currencyRepository;
+
+    public TestController(ICurrencyRepository currencyRepository)
+    {
+        _currencyRepository = currencyRepository;
+    }
+
     /// <summary>
     /// 測試 Get 丟出例外
     /// </summary>
@@ -37,5 +45,31 @@ public class TestController : ControllerBase
         var divideByZero = 100 / zero;
         
         return Ok($"hello world!!");
+    }
+    
+    /// <summary>
+    /// 測試同步取得
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet("test_non_async")]
+    [SwaggerOperation(Tags = new[] { "測試用" })]
+    public IActionResult TestNonAsync()
+    {
+        var result = _currencyRepository.Get();
+
+        return Ok(result);
+    }
+    
+    /// <summary>
+    /// 測試非同步取得
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet("test_async")]
+    [SwaggerOperation(Tags = new[] { "測試用" })]
+    public async Task<IActionResult> TestAsync()
+    {
+        var result = await _currencyRepository.GetAsync();
+
+        return Ok(result);
     }
 }

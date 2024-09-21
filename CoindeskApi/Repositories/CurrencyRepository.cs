@@ -21,6 +21,11 @@ public class CurrencyRepository : ICurrencyRepository
     {
         return await _context.Currencies.FirstOrDefaultAsync(x => x.Code == currencyCode);
     }
+    
+    public List<CurrencyEntity> Get()
+    {
+        return _context.Currencies.ToList();
+    }
 
     public async Task<List<CurrencyEntity>> GetAsync()
     {
@@ -32,8 +37,13 @@ public class CurrencyRepository : ICurrencyRepository
         _context.Currencies.Remove(currency);
     }
 
-    public async Task<int> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken))
+    public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
     {
         return await _context.SaveChangesAsync(cancellationToken);
+    }
+    
+    public int SaveChanges(CancellationToken cancellationToken = default(CancellationToken))
+    {
+        return _context.SaveChanges();
     }
 }

@@ -48,6 +48,7 @@ internal class Program
         builder.Services.AddScoped<ICurrencyRepository, CurrencyRepository>();
         builder.Services.AddScoped<ICurrencyService, CurrencyService>();
         builder.Services.AddScoped<ICoindeskApiService, CoindeskApiService>();
+        builder.Services.AddScoped<MyCommandInterceptor>();
 
         builder.Services.AddHttpClient("coindesk",
             httpClient =>
@@ -65,7 +66,7 @@ internal class Program
         }
 
         // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("DockerDev"))
+        if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("DockerDev")|| app.Environment.IsEnvironment("sit"))
         {
             app.UseSwagger();
             app.UseSwaggerUI();

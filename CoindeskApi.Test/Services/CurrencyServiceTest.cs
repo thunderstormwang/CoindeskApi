@@ -278,6 +278,6 @@ public class CurrencyServiceTest
             CreateTime = DateTime.Now
         };
         stubCurrencyRepo.Add(eur);
-        await stubCurrencyRepo.SaveEntitiesAsync();
+        await stubCurrencyRepo.SaveChangesAsync();
     }
 }

@@ -35,7 +35,7 @@ public class CurrencyService : ICurrencyService
         };
         _currencyRepository.Add(currency);
 
-        if (await _currencyRepository.SaveEntitiesAsync() <= 0)
+        if (await _currencyRepository.SaveChangesAsync() <= 0)
         {
             throw new Exception("更新 0 筆資料");
         }
@@ -62,7 +62,7 @@ public class CurrencyService : ICurrencyService
         }
         
         currency.SetCurrencyName(updateCurrencyDto.CurrencyName);
-        await _currencyRepository.SaveEntitiesAsync();
+        await _currencyRepository.SaveChangesAsync();
     }
 
     public async Task DeleteAsync(DeleteCurrencyDto deleteCurrencyDto)
@@ -74,7 +74,7 @@ public class CurrencyService : ICurrencyService
         }
         
         _currencyRepository.Remove(currency);
-        await _currencyRepository.SaveEntitiesAsync();
+        await _currencyRepository.SaveChangesAsync();
     }
 
     public async Task<PriceVo> GetPricesAsync()
